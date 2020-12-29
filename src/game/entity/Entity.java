@@ -4,18 +4,18 @@ import game.armor.Armor;
 import game.weapon.Weapon;
 
 /*
- * Entity: each opponent in the game is an entity (the player and all of the mobs)
- * they got:
- * level: the level in which they are in
- * hp: the entity health point, when they go to 0 the entity dies
- * attack: the base value of health that the enemy will loose when the entity attacks
- * ammo: the number of attack charges the entity has, if it goes to zero the entity cannot attack
- * maxHp: the maximum health point an entity can get, Hp cannot be over maxHp
- * regen: the base value of health the entity will regenerate after 1 fight
- * critical: the chance of the entity attack hittting twice (chance of hitting twice= critical/100)
- * weapon: the weapon of the entity, boosting the stats
- * armor: the armor of the entity, boosting ths stats
- * */
+* Entity: each opponent in the game is an entity (the player and all of the mobs)
+* they got:
+* level: the level in which they are in
+* hp: the entity health point, when they go to 0 the entity dies
+* attack: the base value of health that the enemy will loose when the entity attacks
+* ammo: the number of attack charges the entity has, if it goes to zero the entity cannot attack
+* maxHp: the maximum health point an entity can get, Hp cannot be over maxHp
+* regen: the base value of health the entity will regenerate after 1 fight
+* critical: the chance of the entity attack hittting twice (chance of hitting twice= critical/100)
+* weapon: the weapon of the entity, boosting the stats
+* armor: the armor of the entity, boosting ths stats
+* */
 public abstract class Entity {
     private String state;
     public String getState() { return state;}
@@ -64,8 +64,8 @@ public abstract class Entity {
     public void setArmor(Armor armor) {this.armor = armor;}
 
     /*
-     *lifeSelfImpact: allows the user to heal or to get hurt when he attacks (according to the weapon he wields)
-     * */
+    *lifeSelfImpact: allows the user to heal or to get hurt when he attacks (according to the weapon he wields)
+    * */
     private void lifeSelfImpact(){
 
         setHp(getHp()+getWeapon().lifeSelfImpact());
@@ -74,8 +74,8 @@ public abstract class Entity {
         }
     }
     /*
-     * user regenerates Hp at the end of every fight (according to the armor he is equipped with and his base stats)
-     * */
+    * user regenerates Hp at the end of every fight (according to the armor he is equipped with and his base stats)
+    * */
     public void regeneration(){
         int initHp = getHp();
         int regenTotal = (getArmor().regen()+getRegen());
@@ -90,10 +90,10 @@ public abstract class Entity {
     }
 
     /*
-     * The entity that attacks lowers the enemy Hp according to his on damages, his weapon damages,
-     * his critical chances and the armor and damage reduction of the enemy
-     * The entity can also affect his own Hp
-     * */
+    * The entity that attacks lowers the enemy Hp according to his on damages, his weapon damages,
+    * his critical chances and the armor and damage reduction of the enemy
+    * The entity can also affect his own Hp
+    * */
     public void attack(Entity enemy) {
         if (getAmmo()-getWeapon().bps() >= 0){
 
@@ -146,8 +146,8 @@ public abstract class Entity {
     }
 
     /*
-     * reload : reloads one bullet
-     * */
+    * reload : reloads one bullet
+    * */
     public void reload(){
         setAmmo(getAmmo()+1);
     }

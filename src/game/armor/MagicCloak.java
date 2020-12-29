@@ -1,6 +1,6 @@
 package game.armor;
 
-
+import game.armor.Armor;
 
 public class MagicCloak implements Armor {
     @Override
