@@ -4,14 +4,20 @@ import game.entity.mob.Mob;
 import game.entity.mob.MobsBoard;
 import game.entity.mob.MobsBuilder;
 import game.entity.player.Player;
+
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.concurrent.TimeUnit;
 import java.util.Scanner;
+
+
 
 /*
 * Game has a fixed player, level which will increment every 3 fights (fightNumber)
 * a score which increase when a mob is killed
 * */
-public class Game {
+public class Game implements KeyListener {
 
     protected Player player;
     private int level = 0;
@@ -20,6 +26,7 @@ public class Game {
     protected Mob mob;
     private static Game instance;
     private UI ui;
+    protected int pointeur =0;
 
     static {
         try {
@@ -43,13 +50,14 @@ public class Game {
         ui = new UI(this);
 
          */
+        JTextField typingArea = new JTextField(20);
 
-        System.out.println("Choose your name");
-        Scanner scanner = new Scanner(System.in);
+        typingArea.addKeyListener(this);
+        System.out.println("pressed");
+        ui = new UI(this);
 
-        String name = scanner.nextLine();
         this.player = Player.getInstance();
-        player.setName(name);
+        player.setName("Le Roi Babtou");
         loop();
 
     }
@@ -60,8 +68,31 @@ public class Game {
     {
         return instance;
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        int key = e.getKeyCode();
+        System.out.println("pressed");
+        if (key == KeyEvent.VK_LEFT) {
+            System.out.println("left");
+        }
+    }
+
     /* upgrade, allows the player to choose between 3 small upgrades every end of level
      * */
+    public void keyPressed(KeyEvent e){
+        int key = e.getKeyCode();
+        System.out.println("pressed");
+        if (key == KeyEvent.VK_LEFT) {
+            System.out.println("left");
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
     private void upgrade() {
 
         loading();
@@ -123,6 +154,11 @@ public class Game {
 
         while(player.getHp() > 0 && mob.getHp() > 0)  //while the player and the mob are alive (the whole loop represents one turn)
         {
+
+            ui.updatePlaDisplay();
+            ui.updateEnnDisplay();
+            ui.updateActDisplay();
+            ui.display();
             System.out.println("        1 ATTACK, 2 DEFEND, 3 RELOAD");
             Scanner scanner = new Scanner(System.in);
             int action = scanner.nextInt(); //the player inputs his action
@@ -183,21 +219,19 @@ public class Game {
         while (player.getHp() > 0) {
 
 
-            loading();
-            System.out.println("Press enter when you are ready" );
-            Scanner starter = new Scanner(System.in);
-            String ready = starter.nextLine();
-            System.out.println("----------------------GOOD LUCK----------------------" );
             MobsBuilder mobsBuilder = new MobsBuilder();
             MobsBoard mobs = mobsBuilder.buildMobs(level);
-            player.getInfoPlayer();
-            loading();
+
 
             while (fightNumber < 3) {    // every 3 fights
 
                 mob = mobs.getMob(fightNumber);      //we pick one of the mobs in the board
+                /*
                 System.out.println("NEW ENEMY : " + mob.getQuality() + " " + mob.getClass().getSimpleName() + " dressed with " +
                         mob.getArmor().getClass().getSimpleName() + " and armed with " + mob.getWeapon().getClass().getSimpleName());
+
+                 */
+
                 loading();
                 mob.getInfoMob();
                 fight(mob);         //lauches the fight versus the mob

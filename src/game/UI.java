@@ -27,11 +27,12 @@ public class UI {
         resetAnnouncementDisplay();
         resetAnimationsDisplay();
         resetPlaDisplay();
-
+        resetActionDisplay();
+        /*
         updateEnnDisplay();
         updatePlaDisplay();
-
-        display();
+        */
+        //display();
 
     }
 
@@ -143,7 +144,7 @@ public class UI {
         strAnn0 += "┐";
         announcement.add(strAnn0);
 
-        for (int v = 0; v < this.height-2; v++) {
+        for (int v = 0; v < (this.height-2) - 7; v++) {
             String strAnn1 = "│";
             for (int c = 0; c < (this.width/2)-2; c++) {
                 strAnn1 += " ";
@@ -162,6 +163,31 @@ public class UI {
 
 
 
+    }
+
+    public void resetActionDisplay(){
+        String strAct0 = "┌";
+        for (int c = 0; c < this.width-2; c++) {
+            strAct0 += "─";
+        }
+        strAct0 += "┐";
+        actions.add(strAct0);
+
+        for (int v = 0; v < (this.height-(this.aniSize + 8))-2 ; v++) {
+            String strAct1 = "│";
+            for (int c = 0; c < this.width-2; c++) {
+                strAct1 += " ";
+
+            }
+            strAct1 += "│";
+            actions.add(strAct1);
+        }
+        String strAct2 = "└";
+        for (int c = 0; c < this.width-2; c++) {
+            strAct2 += "─";
+        }
+        strAct2 += "┘";
+        actions.add(strAct2);
     }
 
     public void updateEnnDisplay(){
@@ -193,7 +219,7 @@ public class UI {
     public void updatePlaDisplay(){
 
         String stat = this.game.player.getName()+ "  " + Integer.toString(this.game.player.getHp()) + "/"+ Integer.toString(this.game.player.getMaxHp());
-        this.player.set(1,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",stat)+"│");
+        this.player.set(1,"│"+String.format("%"+ Integer.toString((this.width/2)-2)+ "s",stat)+"│");
         //██░
 
         String str = "";
@@ -212,13 +238,21 @@ public class UI {
 
         }
 
-        this.player.set(2,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",str)+"│");
+        this.player.set(2,"│"+String.format("%"+ Integer.toString((this.width/2)-2)+ "s",str)+"│");
+
+    }
+
+    public void updateActDisplay(){
+        actions.set(2,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","ATTACK")+"│");
+        actions.set(3,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","DEFEND")+"│");
+        actions.set(4,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","RELOAD")+"│");
 
     }
 
 
 
     public void display(){
+        fullString = "";
 
         for (int c = 0; c < this.height+2; c++) {
             if(c == 0){
@@ -256,6 +290,12 @@ public class UI {
 
 
 
+            } else if (c != this.height+1){
+                fullString += this.borderWindow.get(c).substring(0,3);
+
+                fullString += this.actions.get(c-(this.aniSize + 9));
+                fullString += this.borderWindow.get(c).substring(this.width+3);
+                fullString += "\n";
             } else {
                 fullString += this.borderWindow.get(c);
                 fullString += "\n";
@@ -270,10 +310,7 @@ public class UI {
         }
         System.out.println(fullString);
 
-        for(String s : animations){
 
-            System.out.println(s);
-        }
 
 
 
