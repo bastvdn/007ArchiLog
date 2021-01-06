@@ -1,15 +1,21 @@
 package game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.io.IOException;
+
+
 
 public class UI {
     Game game;
     String fullString = "";
     int aniSize;
+    int idAnn;
     List<String> borderWindow = new ArrayList<String>();
     List<String> announcement= new ArrayList<String>();
+    List<String> announcementList= new ArrayList<String>(10);
     List<String> ennemy = new ArrayList<String>();
     List<String> animations = new ArrayList<String>();
     List<String> player = new ArrayList<String>();
@@ -34,6 +40,17 @@ public class UI {
         */
         //display();
 
+    }
+
+    private static void wait(int ms){
+        try
+        {
+            Thread.sleep(ms);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public void resetBorderDisplay(){
@@ -191,8 +208,17 @@ public class UI {
     }
 
     public void updateEnnDisplay(){
+        String bullets = "bullets : ";
+        if (this.game.turns == 1){
+            bullets += Integer.toString(this.game.mob.getAmmo());
 
-        String stat = this.game.mob.getClass().getSimpleName() + "  " + Integer.toString(this.game.mob.getHp()) + "/"+ Integer.toString(this.game.mob.getMaxHp());
+
+        } else {
+            bullets += "?";
+        }
+
+        String stat = this.game.mob.getClass().getSimpleName() + "  " + Integer.toString(this.game.mob.getHp()) + "/"+ Integer.toString(this.game.mob.getMaxHp())
+                + "  " + bullets;
         this.ennemy.set(1,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",stat)+"│");
         //██░
 
@@ -242,6 +268,55 @@ public class UI {
 
     }
 
+    public void updateAnimation(){
+
+
+    }
+
+    public void loading(){
+        this.animations.get(3);
+        resetDisplay();
+        wait(100);
+        this.animations.set(3,"hello2");
+        resetDisplay();
+        wait(1000);
+        this.animations.set(3,"hello3");
+        resetDisplay();
+    }
+
+    public void updateAnnouncementDisplay(){
+        for(int i = 0; i < (this.height-2) - 7 && i<=announcementList.size()-1; i++){
+
+            this.announcement.set(11-i,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",this.announcementList.get(announcementList.size()-(i+1)))+"│");
+
+        }
+
+
+
+    }
+
+    public void announce(String s){
+
+
+        if(s.equals("mobInfo")){
+            String str = game.mob.getQuality()+ " " +game.mob.getClass().getSimpleName() + " : "+ game.mob.getHp() + "/"+ game.mob.getMaxHp() +
+                    "HP";
+            String str1 = "bullets: " + game.mob.getAmmo() + "   attaque: "+ game.mob.getAttack();
+            this.announcementList.add("you encounter a NEW ENNEMY");
+
+            this.announcementList.add("↓   ↓   ↓   ↓   ↓   ↓   ↓ ");
+            this.announcementList.add(str);
+            this.announcementList.add(str1);
+            this.announcementList.add("");
+
+
+            idAnn += 2;
+        }
+        updateAnnouncementDisplay();
+
+
+    }
+
     public void updateActDisplay(){
         actions.set(2,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","ATTACK")+"│");
         actions.set(3,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","DEFEND")+"│");
@@ -251,7 +326,8 @@ public class UI {
 
 
 
-    public void display(){
+    public void resetDisplay(){
+
         fullString = "";
 
         for (int c = 0; c < this.height+2; c++) {
@@ -308,7 +384,7 @@ public class UI {
 
 
         }
-        System.out.println(fullString);
+        display();
 
 
 
@@ -316,4 +392,11 @@ public class UI {
 
     }
 
+    public void display(){
+
+        System.out.println(fullString);
+
+    }
+
 }
+

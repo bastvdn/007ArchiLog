@@ -27,6 +27,7 @@ public class Game implements KeyListener {
     private static Game instance;
     private UI ui;
     protected int pointeur =0;
+    protected int turns = 0;
 
     static {
         try {
@@ -154,16 +155,16 @@ public class Game implements KeyListener {
 
         while(player.getHp() > 0 && mob.getHp() > 0)  //while the player and the mob are alive (the whole loop represents one turn)
         {
-
+            this.turns += 1;
             ui.updatePlaDisplay();
             ui.updateEnnDisplay();
             ui.updateActDisplay();
-            ui.display();
+            ui.resetDisplay();
             System.out.println("        1 ATTACK, 2 DEFEND, 3 RELOAD");
             Scanner scanner = new Scanner(System.in);
             int action = scanner.nextInt(); //the player inputs his action
             //the mob chooses what does he do according to the current player stats
-            loading();
+            //ui.loading();
 
             //1 = attack, 2 = protect , 3 = reload
             if (action == 1) {// if the player attacks
@@ -192,6 +193,7 @@ public class Game implements KeyListener {
             fightStatus();
             System.out.println("------------------------------------------------------"); // end of one turn
         }
+        this.turns = 0;
     }
 
     /*
@@ -232,8 +234,10 @@ public class Game implements KeyListener {
 
                  */
 
-                loading();
-                mob.getInfoMob();
+                //loading();
+                //mob.getInfoMob();
+                ui.announce("mobInfo");
+
                 fight(mob);         //lauches the fight versus the mob
 
                 if (player.getHp() <= 0) {          //if the player dies the game ends
