@@ -105,7 +105,7 @@ public abstract class Entity {
                 int initEnemyHp = enemy.getHp(); //if the random number between 1 and  100 is inferior to the crit chance, the attack will hit twice
                 if ((int)(Math.random() * 101) < (critical+getWeapon().criticalStrike())) {
                     crit = 2;                                                                                           //critical counter goes to 2
-                    System.out.println("                CRITICAL STRIKE");
+                    //System.out.println("                CRITICAL STRIKE");
                     lifeSelfImpact();                                                                                   //will hit twice if crit
                 }
                 lifeSelfImpact();
@@ -115,9 +115,9 @@ public abstract class Entity {
                 float trueDmg= damageMultiplicator*baseDamage;
                 int trueDmgInt = (int)trueDmg;
                 enemy.setHp(enemy.getHp() - trueDmgInt);                                                                //the enemy Hp are lowered according to : the attacker damages and weapon damages, the armor and damage reduction of the enemy
-                System.out.println(enemy.getHp() - (damageMultiplicator*baseDamage));
-                System.out.println("                " + enemy.getClass().getSimpleName() + " à perdu " +
-                        (initEnemyHp-enemy.getHp()) + " hp");
+                //System.out.println(enemy.getHp() - (damageMultiplicator*baseDamage));
+                //System.out.println("                " + enemy.getClass().getSimpleName() + " à perdu " +
+                //        (initEnemyHp-enemy.getHp()) + " hp");
 
                 if (getWeapon().lifeSelfImpact() != 0) {
                     System.out.println(getClass().getSimpleName() + "heals himself" + (getHp()-initHp) + " Hp");
@@ -131,10 +131,11 @@ public abstract class Entity {
 
     /* getInfoWeapon: gives the stats of the weapon
      * */
-    public void getInfoWeapon(){
+    public String getInfoWeapon(){
 
         System.out.println(getWeapon().getClass().getSimpleName() + "---> Additionnal damages :" + getWeapon().damage() +
                 " Bullet cost :" + getWeapon().bps() + " LifeSteal :" + getWeapon().lifeSelfImpact());
+        return null;
     }
 
     /* getInfoArmor: displays the stats of the armor

@@ -20,6 +20,17 @@ public class UI {
     List<String> animations = new ArrayList<String>();
     List<String> player = new ArrayList<String>();
     List<String> actions = new ArrayList<String>();
+    List<String> actionList = new ArrayList<String>();
+
+    public int getPlayerAction() {
+        return playerAction;
+    }
+
+    public void setPlayerAction(int playerAction) {
+        this.playerAction = playerAction;
+    }
+
+    int playerAction = 0;
 
     int width = 100;
     int height = 20;
@@ -40,6 +51,27 @@ public class UI {
         */
         //display();
 
+    }
+
+    public final static void clearConsole()
+    {
+        try
+        {
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows"))
+            {
+                Runtime.getRuntime().exec("cls");
+            }
+            else
+            {
+                Runtime.getRuntime().exec("clear");
+            }
+        }
+        catch (final Exception e)
+        {
+            //  Handle any exceptions.
+        }
     }
 
     private static void wait(int ms){
@@ -104,10 +136,10 @@ public class UI {
         }
         strEnn3 += "┘";
 
-        ennemy.add(strEnn0);
-        ennemy.add(strEnn1);
-        ennemy.add(strEnn2);
-        ennemy.add(strEnn3);
+        ennemy.add(0,strEnn0);
+        ennemy.add(1,strEnn1);
+        ennemy.add(2,strEnn2);
+        ennemy.add(3,strEnn3);
     }
 
     public void resetPlaDisplay(){
@@ -133,10 +165,10 @@ public class UI {
         }
         strPla3 += "┘";
 
-        player.add(strPla0);
-        player.add(strPla1);
-        player.add(strPla2);
-        player.add(strPla3);
+        player.add(0,strPla0);
+        player.add(1,strPla1);
+        player.add(2,strPla2);
+        player.add(3,strPla3);
     }
 
     public void resetAnimationsDisplay(){
@@ -146,7 +178,7 @@ public class UI {
             for (int c = 0; c < (this.width/2); c++) {
                 strAni0 += " ";
             }
-            animations.add(strAni0);
+            animations.add(v,strAni0);
         }
 
 
@@ -183,6 +215,13 @@ public class UI {
     }
 
     public void resetActionDisplay(){
+        this.actionList.add(0,"Nothing");
+        this.actionList.add(1,"Attack");
+        this.actionList.add(2,"Defend");
+        this.actionList.add(3,"Reload");
+
+
+
         String strAct0 = "┌";
         for (int c = 0; c < this.width-2; c++) {
             strAct0 += "─";
@@ -219,7 +258,7 @@ public class UI {
 
         String stat = this.game.mob.getClass().getSimpleName() + "  " + Integer.toString(this.game.mob.getHp()) + "/"+ Integer.toString(this.game.mob.getMaxHp())
                 + "  " + bullets;
-        this.ennemy.set(1,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",stat)+"│");
+        this.ennemy.set(1,"│"+String.format("%"+ Integer.toString((this.width/2)-2)+ "s",stat)+"│");
         //██░
 
         String str = "";
@@ -238,14 +277,14 @@ public class UI {
 
         }
 
-        this.ennemy.set(2,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",str)+"│");
+        this.ennemy.set(2,"│"+String.format("%"+ Integer.toString((this.width/2)-2)+ "s",str)+"│");
 
     }
 
     public void updatePlaDisplay(){
 
         String stat = this.game.player.getName()+ "  " + Integer.toString(this.game.player.getHp()) + "/"+ Integer.toString(this.game.player.getMaxHp());
-        this.player.set(1,"│"+String.format("%"+ Integer.toString((this.width/2)-2)+ "s",stat)+"│");
+        this.player.set(1,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",stat)+"│");
         //██░
 
         String str = "";
@@ -264,23 +303,31 @@ public class UI {
 
         }
 
-        this.player.set(2,"│"+String.format("%"+ Integer.toString((this.width/2)-2)+ "s",str)+"│");
+        this.player.set(2,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",str)+"│");
 
     }
 
-    public void updateAnimation(){
+    public void updateAnimation(int ennemyAction){
+        String ally = this.actionList.get(this.playerAction);
+        String enn = this.actionList.get(ennemyAction);
+
+        String tot = "          YOU "+ ally+"       ENNEMY "+ enn;
+        this.animations.set(2, String.format("%-"+ Integer.toString((this.width/2))+ "s",tot));
 
 
     }
 
     public void loading(){
-        this.animations.get(3);
-        resetDisplay();
-        wait(100);
-        this.animations.set(3,"hello2");
+
+        int lr = this.width/8;
+
+        this.animations.set(2,"│"+String.format("%"+ Integer.toString(lr)+"s","\uD83D\uDEE1️")+"│");
         resetDisplay();
         wait(1000);
-        this.animations.set(3,"hello3");
+        this.animations.set(2,"│"+String.format("%"+ Integer.toString(lr*2)+"s","░")+"│");
+        resetDisplay();
+        wait(1000);
+        this.animations.set(2,"│"+String.format("%"+ Integer.toString(lr*3)+"s","░")+"│");
         resetDisplay();
     }
 
@@ -290,6 +337,8 @@ public class UI {
             this.announcement.set(11-i,"│"+String.format("%-"+ Integer.toString((this.width/2)-2)+ "s",this.announcementList.get(announcementList.size()-(i+1)))+"│");
 
         }
+
+
 
 
 
@@ -311,6 +360,96 @@ public class UI {
 
 
             idAnn += 2;
+        }
+
+        if(s.equals("mobDead")){
+            String str = "YOU KILLED "+ game.mob.getQuality()+ " " +game.mob.getClass().getSimpleName();
+            String str1 = "bullets: " + game.mob.getAmmo() + "   attaque: "+ game.mob.getAttack();
+
+
+
+            this.announcementList.add(str);
+
+            this.announcementList.add("");
+
+
+            idAnn += 2;
+        }
+
+        if (s.equals("dropGun")){
+
+            String str = "You Droped : " + game.mob.getWeapon().getClass().getSimpleName() + " Do you want it?" ;
+
+            String str1 = "current weapon : " +game.player.getWeapon().getClass().getSimpleName() + "--> Additionnal damages :" + game.player.getWeapon().damage();
+
+            String str2 = " Bullet cost :" + game.player.getWeapon().bps() +" LifeSteal :" + game.player.getWeapon().lifeSelfImpact();
+
+            String str3= game.mob.getWeapon().getClass().getSimpleName()  + "--> Additionnal damages :" + game.mob.getWeapon().damage();
+
+            String str4 = " Bullet cost :" + game.mob.getWeapon().bps() +" LifeSteal :" + game.mob.getWeapon().lifeSelfImpact();
+
+            //mob.getInfoWeapon();
+            String str5 = "                            Y/N";
+            this.announcementList.add(str);
+            this.announcementList.add(str1);
+            this.announcementList.add(str2);
+            this.announcementList.add("");
+            this.announcementList.add(str3);
+            this.announcementList.add(str4);
+            this.announcementList.add(str5);
+
+
+
+        }
+        if (s.equals("dropArmor")){
+
+            String str = "You Droped : " + game.mob.getArmor().getClass().getSimpleName() + " Do you want it?" ;
+
+            String str1 = "current armor : " +game.player.getArmor().getClass().getSimpleName() + "--> damage reduction :" + game.player.getArmor().damageReduced();
+
+            String str2 = " added maxHP :" + game.player.getArmor().pdV() + " regeneration :" + game.player.getArmor().regen();
+
+            String str3= game.mob.getArmor().getClass().getSimpleName()  + "--> damage reduction :" + game.mob.getArmor().damageReduced();
+
+            String str4 = " added maxHP :" + game.mob.getArmor().pdV() + " regeneration :" + game.mob.getArmor().regen();
+
+            //mob.getInfoWeapon();
+            String str5 = "                            Y/N";
+            this.announcementList.add(str);
+            this.announcementList.add(str1);
+            this.announcementList.add(str2);
+            this.announcementList.add("");
+            this.announcementList.add(str3);
+            this.announcementList.add(str4);
+            this.announcementList.add(str5);
+
+
+
+        }
+        if(s.equals("upgrade")){
+            String str0 ="    -----------UPGRADE MENU-----------";
+
+            String str1 = "1 -> +10maxHp, 2 -> +5 attack, , 3 -> +3 bullets";
+            this.announcementList.add(str0);
+            this.announcementList.add(str1);
+            this.announcementList.add("");
+
+
+
+        }
+
+        if (s.equals("plaDead")){
+            String str0 = "----------------------------";
+            String str1 ="          YOU DIED";
+            String str2 = "----------------------------";
+            this.announcementList.add("");
+            this.announcementList.add(str0);
+            this.announcementList.add(str1);
+            this.announcementList.add(str2);
+
+            this.announcementList.add("");
+
+
         }
         updateAnnouncementDisplay();
 
@@ -393,7 +532,7 @@ public class UI {
     }
 
     public void display(){
-
+        clearConsole();
         System.out.println(fullString);
 
     }
