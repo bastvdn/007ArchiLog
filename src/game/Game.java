@@ -4,7 +4,7 @@ import game.entity.mob.Mob;
 import game.entity.mob.MobsBoard;
 import game.entity.mob.MobsBuilder;
 import game.entity.player.Player;
-import java.util.concurrent.TimeUnit;
+
 import java.util.Scanner;
 
 /*
@@ -29,7 +29,7 @@ public class Game {
         }
     }
 
-    protected Game() throws InterruptedException {
+    private Game() throws InterruptedException {
 
         /*
         MobsBuilder mobsBuilder = new MobsBuilder();
@@ -186,7 +186,6 @@ public class Game {
             loading();
             System.out.println("Press enter when you are ready" );
             Scanner starter = new Scanner(System.in);
-            String ready = starter.nextLine();
             System.out.println("----------------------GOOD LUCK----------------------" );
             MobsBuilder mobsBuilder = new MobsBuilder();
             MobsBoard mobs = mobsBuilder.buildMobs(level);
@@ -199,7 +198,7 @@ public class Game {
                 System.out.println("NEW ENEMY : " + mob.getQuality() + " " + mob.getClass().getSimpleName() + " dressed with " +
                         mob.getArmor().getClass().getSimpleName() + " and armed with " + mob.getWeapon().getClass().getSimpleName());
                 loading();
-                mob.getInfoMob();
+                System.out.println(mob.getInfoMob());
                 fight(mob);         //lauches the fight versus the mob
 
                 if (player.getHp() <= 0) {          //if the player dies the game ends

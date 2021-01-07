@@ -1,6 +1,6 @@
 package game.entity.mob;
 
-class RedHead extends Mob {
+class  RedHead extends Mob {
 
     RedHead(int level) {
         setLevel(level);
