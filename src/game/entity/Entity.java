@@ -84,8 +84,6 @@ public abstract class Entity {
             if (getHp()>getMaxHp()){
                 setHp(getMaxHp());
             }
-
-            System.out.println("You heal yourself" + (getHp()- initHp)+ " Hp");
         }
     }
 

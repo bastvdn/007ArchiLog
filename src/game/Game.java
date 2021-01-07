@@ -17,18 +17,22 @@ import java.util.Scanner;
 * Game has a fixed player, level which will increment every 3 fights (fightNumber)
 * a score which increase when a mob is killed
 * */
-public class Game implements KeyListener {
+public class Game{
 
-    protected Player player;
-    private int level = 0;
+    protected Player player;   //the unique player
+    private int level = 0;      //the level of the game, increasing each 3 fights
     private int fightNumber = 0;
     private int score = 0;
     protected Mob mob;
-    private static Game instance;
-    private UI ui;
+    private static Game instance;   //Singleton game
+    private UI ui;                  //Creation of the UI
     protected int pointeur =0;
     protected int turns = 0;
 
+
+    /*
+    * Singleton generation
+    * */
     static {
         try {
             instance = new Game();
@@ -37,81 +41,48 @@ public class Game implements KeyListener {
         }
     }
 
+
+    /*
+    * Class Constructor
+    * initiate the player and UI, ask for the player name and launch the gameplay loop (loop())
+    * */
     private Game() throws InterruptedException {
-
-        /*
-        MobsBuilder mobsBuilder = new MobsBuilder();
-        MobsBoard mobs = mobsBuilder.buildMobs(level);
-        this.mob = mobs.getMob(0);
-        this.mob.setHp(this.mob.getMaxHp()-10);
-
-        this.player = Player.getInstance();
-        player.setName("Basty");
-
-        ui = new UI(this);
-
-         */
 
         ui = new UI(this);
         ui.announce("start");
-        ui.resetDisplay();
+        ui.resetDisplay();                              //We setup the UI
         Scanner scanner = new Scanner(System.in);
         String action = scanner.nextLine();
-
         this.player = Player.getInstance();
-        player.setName(action);
-        loop();
+        player.setName(action);                         //We setup the player name
+        loop();                                         //game loop
 
     }
 
-    /* Setup the Singleton design Pattern
+    /*
+    * Setup the Singleton design Pattern
     * */
     static Game getInstance()
     {
         return instance;
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        int key = e.getKeyCode();
-        System.out.println("pressed");
-        if (key == KeyEvent.VK_LEFT) {
-            System.out.println("left");
-        }
-    }
-
-    /* upgrade, allows the player to choose between 3 small upgrades every end of level
-     * */
-    public void keyPressed(KeyEvent e){
-        int key = e.getKeyCode();
-        System.out.println("pressed");
-        if (key == KeyEvent.VK_LEFT) {
-            System.out.println("left");
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
+    /*
+     * upgrade, allows the player to choose between 3 small upgrades every end of level
+     * 1 -> +10maxHp, 2 -> +5 attack, , 3 -> +3 bullets
+     *  */
     private void upgrade() {
 
-        loading();
+
         ui.resetActionDisplay();
-        ui.announce("upgrade");
+        ui.announce("upgrade");             //setup UI
         ui.resetDisplay();
-
-        System.out.println("    -----------UPGRADE MENU-----------");
-        player.getInfoPlayer();
-        System.out.println("1 -> +10maxHp, 2 -> +5 attack, , 3 -> +3 bullets");
-
 
         Scanner scanner = new Scanner(System.in);
         int action = scanner.nextInt();
 
         if (action == 1){
-            player.setMaxHp(player.getMaxHp()+10);
+            player.setMaxHp(player.getMaxHp()+10);      //buff the player according to the input
         }
         if (action == 2){
             player.setAttack(player.getAttack()+5);
@@ -119,10 +90,6 @@ public class Game implements KeyListener {
         if (action == 3){
             player.setAmmo(player.getAmmo()+3);
         }
-        loading();
-
-        System.out.println("    ----------SUCCESSFUL UPGRADE-----------");
-        System.out.println("    ROUND: " + level);
     }
 
     /* wait: used to delay time
@@ -156,104 +123,99 @@ public class Game implements KeyListener {
         System.out.println("                        " + mob.getClass().getSimpleName() + " :"   +  mob.getHp() + "/"+ mob.getMaxHp() + "HP");
     }
 
-    /* fight: starts the fight with a mob
+    /*
+     * fight: starts the fight with a mob
      * */
     private void fight(Mob mob) {
 
         while(player.getHp() > 0 && mob.getHp() > 0)  //while the player and the mob are alive (the whole loop represents one turn)
         {
             this.turns += 1;
+
+            // setting up the UI
             ui.updatePlaDisplay();
             ui.updateEnnDisplay();
             ui.updateActDisplay();
             ui.resetDisplay();
-            System.out.println("        1 ATTACK, 2 DEFEND, 3 RELOAD");
+
             Scanner scanner = new Scanner(System.in);
             int action = scanner.nextInt(); //the player inputs his action
-            //the mob chooses what does he do according to the current player stats
-            //ui.loading();
+                                            //the mob chooses what does he do according to the current player stats
 
             //1 = attack, 2 = protect , 3 = reload
-            if (action == 1) {// if the player attacks
+            if (action == 1) {               // if the player attacks
                 player.setState("Attacking");
-                System.out.print("YOU ATTACK");
-                ui.setPlayerAction(1);
-                mobDoAction();
-                player.attack(mob);
+                ui.setPlayerAction(1);      //we modify the display (animation box)
+                mobDoAction();              //mob generates an action
+                player.attack(mob);         //the player wont deal dmg if the action generated by the mob was Defend
             }
 
             if (action == 2) {
                 player.setState("Defending");
-                System.out.print("YOU DEFEND");
                 ui.setPlayerAction(2);
                 mobDoAction();
             }
 
             if (action == 3) {
                 player.setState("Reloading");
-                System.out.print("YOU RELOAD");
                 ui.setPlayerAction(3);
                 mobDoAction();
                 player.reload();
             }
 
             if (action == 4){                                                   // for testing purposes
-                mob.setHp(0);
+                mob.setHp(0);           //one shots the mob
             }
             fightStatus();
+            ui.updateAnimation();
+            ui.updatePlaDisplay();
 
         }
+
         wait(500);
-        ui.resetDisplay();
+        ui.resetDisplay();   // we reset the display each turn
         this.turns = 0;
     }
 
     /*
-    * loop : this is the gameplay loop, she keeps turning until the player die or the max level is hit
-    *
+    * generates the mob comportement
     *
     * */
     private void mobDoAction(){
         int mobAction = mob.rng(player);
 
         if (mobAction == 1) {//if both attack they both get hurt
-            System.out.println("                        ENEMY ATTACKS");
-
+            ui.setMobAction(1);
             mob.attack(player);
         }
         if (mobAction == 2) { //nothing happens and player looses bullets
-            System.out.println("                        ENEMY DEFENDS");
+            ui.setMobAction(2);
+            ;
         }
         if (mobAction == 3) { //the mob reload and gets attacked
-            System.out.println("                        ENEMY RELOADS");
+            ui.setMobAction(3);
             mob.reload();
         }
-        ui.updateAnimation(mobAction);
+
     }
 
+    /*
+     * loop : this is the gameplay loop, she keeps turning until the player die or the max level is hit
+     *
+     * */
     void loop() {
-        while (player.getHp() > 0) {
-
+        while (player.getHp() > 0) {                //while the player is alive
 
             MobsBuilder mobsBuilder = new MobsBuilder();
-            MobsBoard mobs = mobsBuilder.buildMobs(level);
-
+            MobsBoard mobs = mobsBuilder.buildMobs(level);     //Generate a mobbuilder board containing all the mobs
 
             while (fightNumber < 3) {    // every 3 fights
 
-                mob = mobs.getMob(fightNumber);      //we pick one of the mobs in the board
-                /*
-                System.out.println("NEW ENEMY : " + mob.getQuality() + " " + mob.getClass().getSimpleName() + " dressed with " +
-                        mob.getArmor().getClass().getSimpleName() + " and armed with " + mob.getWeapon().getClass().getSimpleName());
+                mob = mobs.getMob(fightNumber);      //we pick one of the mobs in the board according to the fight level
+                ui.announce("mobInfo");           //setup UI
 
-                 */
-
-                //loading();
-                //mob.getInfoMob();
-                ui.announce("mobInfo");
-
-                fight(mob);         //lauches the fight versus the mob
-
+                fight(mob);                         //lauches the fight versus the mob
+                //fight ended
                 if (player.getHp() <= 0) {          //if the player dies the game ends
                     ui.announce("plaDead");
                     ui.resetEnnDisplay();
@@ -265,73 +227,53 @@ public class Game implements KeyListener {
                 }
                 if (mob.getHp() <= 0) {       //if the mob dies
                     ui.announce("mobDead");
-                    wait(500);
+
+                    wait(1500);
                     ui.resetEnnDisplay();
                     ui.resetActionDisplay();
                     ui.resetAnimationsDisplay();
-
                     ui.resetDisplay();
+                    wait(1500);
 
-                    //System.out.println(mob.getClass().getSimpleName() + " DEAD");
                     player.regeneration();              //the player regens Hp
+                    ui.updatePlaDisplay();
+
+                    ui.announce("regen");
+                    wait(1500);
+                    ui.resetDisplay();
+                    wait(1500);
 
 
-                    //loading();
-                    int drop = (int)(Math.random() * 3);
+                    int drop = (int)(Math.random() * 3);        //item dropping
                     switch(drop) {       //the player has 1/3 chance to drop the enemy weapon and 1/3 chances to drop the enemy armor
 
                         case 0:
                             ui.announce("dropGun");
                             ui.resetDisplay();
-                            /*
-                            System.out.println("???Do you want " + mob.getWeapon().getClass().getSimpleName() + "???");
-                            System.out.print("Actual weapon : ");
-                            player.getInfoWeapon();
-                            System.out.print("New weapon : ");
-                            mob.getInfoWeapon();
-                            System.out.println("                            y/n");
 
-                             */
                             Scanner scanner = new Scanner(System.in);
                             String choice = scanner.nextLine();
 
-                            if (choice.equals("y")) {
+                            if (choice.equals("y")) {               //he chooses to get the item
                                 player.setWeapon(mob.getWeapon());
-                                System.out.println("you are equipped with : " + player.getWeapon().getClass().getSimpleName());
-                                loading();
                             }
                             break;
 
                         case 1:
                             ui.announce("dropArmor");
                             ui.resetDisplay();
-                            /*
-                            System.out.println("???Do you want " + mob.getArmor().getClass().getSimpleName() + "???");
-                            System.out.print("Actual armor : ");
-                            player.getInfoArmor();
-                            System.out.print("New weapon : ");
-                            mob.getInfoArmor();
-                            System.out.println("                            y/n");
 
-                             */
                             Scanner scannerArm = new Scanner(System.in);
                             String choiceArm = scannerArm.nextLine();
                             if (choiceArm.equals("y")) {
                                 player.setArmor(mob.getArmor());
-                                System.out.println("you are equipped with : " + player.getArmor().getClass().getSimpleName());
-                                loading();
                             }
                             break;
 
                         case 2:
                             break;
                     }
-                    /*
-                    player.getInfoPlayer();
-                    loading();
-                    System.out.println("STILL " + (2 - fightNumber) + " FIGHT BEFORE UPGRADING");
 
-                     */
                     fightNumber += 1;    //the player goes to the next fight
                     score += 1;
                     loading();
@@ -339,9 +281,6 @@ public class Game implements KeyListener {
             }
             level += 1;     //the player goes to the next level, ennemy will be stronger
             fightNumber = 0;
-            System.out.println("------------------------------------------------------");
-            System.out.println("end of round");
-            System.out.println("------------------------------------------------------");
             upgrade();      //the player can upgrade himself
         }
         System.out.println("WELL PLAYED YOU WON");

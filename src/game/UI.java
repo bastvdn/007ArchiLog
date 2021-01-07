@@ -35,6 +35,12 @@ public class UI {
 
     int playerAction = 0;
 
+
+
+    int mobAction = 0;
+    int lastEnnemyHp;
+    int lastPlayerHp;
+
     /*
      * The size of the window
      * */
@@ -75,6 +81,21 @@ public class UI {
         this.playerAction = playerAction;
     }
 
+    public int getMobAction() {
+        return mobAction;
+    }
+
+    public void setMobAction(int mobAction) {
+        this.mobAction = mobAction;
+    }
+
+    public int getLastPlayerHp() {
+        return lastPlayerHp;
+    }
+
+    public void setLastPlayerHp(int lastPlayerHp) {
+        this.lastPlayerHp = lastPlayerHp;
+    }
 
     /*
     * Used to clear console not yet used
@@ -372,12 +393,39 @@ public class UI {
     /*
     * update the central animation
     * */
-    public void updateAnimation(int ennemyAction){
+    public void updateAnimation(){
         String ally = this.actionList.get(this.playerAction);
-        String enn = this.actionList.get(ennemyAction);
+        String enn = this.actionList.get(this.mobAction);
 
         String tot = "          YOU "+ ally+"       ENNEMY "+ enn;
         this.animations.set(2, String.format("%-"+ Integer.toString((this.width/2))+ "s",tot));
+
+        String enndmg = String.format("%-"+ Integer.toString((this.width/4))+ "s","");
+        String allydmg = String.format("%"+ Integer.toString((this.width/4))+ "s","");
+        if(ally.equals("Attack")){
+
+            if (this.game.player.getAmmo()-this.game.player.getWeapon().bps() < 0){
+                String oob = "      ⚠OUT OF BULLETS ⚠ ️";
+                this.animations.set(3, String.format("%-"+ Integer.toString((this.width/2))+ "s",oob));
+            }else{
+                enndmg = String.format("%-"+ Integer.toString((this.width/4))+ "s","        -" + Integer.toString(this.lastEnnemyHp - this.game.mob.getHp()));
+
+
+            }
+
+
+
+        }
+        if(enn.equals("Attack")){
+
+
+            allydmg = String.format("%"+ Integer.toString((this.width/4))+ "s","-" + Integer.toString(this.lastPlayerHp - this.game.player.getHp())+"         ");
+
+
+        }
+        this.animations.set(1, String.format("%"+ Integer.toString((this.width/2))+ "s",allydmg+enndmg));
+        this.lastEnnemyHp = this.game.mob.getHp();
+        this.lastPlayerHp = this.game.player.getHp();
 
 
     }
@@ -406,6 +454,7 @@ public class UI {
     public void announce(String s){
 
         if(s.equals("start")){
+
             this.announcementList.add("Welcome in 007");
 
             this.announcementList.add("↓   ↓   ↓   ↓   ↓   ↓   ↓ ");
@@ -417,6 +466,8 @@ public class UI {
 
 
         if(s.equals("mobInfo")){
+            this.lastPlayerHp = this.game.player.getHp();
+            this.lastEnnemyHp = this.game.mob.getHp();
             String str = game.mob.getQuality()+ " " +game.mob.getClass().getSimpleName() + " : "+ game.mob.getHp() + "/"+ game.mob.getMaxHp() +
                     "HP";
             String str1 = "bullets: " + game.mob.getAmmo() + "   attaque: "+ game.mob.getAttack();
@@ -510,6 +561,14 @@ public class UI {
 
 
         }
+
+        if (s.equals("regen")){
+            int regenTotal = (game.player.getArmor().regen()+game.player.getRegen());
+            String str1 ="you regenerates :" + Integer.toString(regenTotal) + " hp";
+            this.announcementList.add(str1);
+            this.announcementList.add("");
+
+        }
         updateAnnouncementDisplay();
 
 
@@ -519,9 +578,9 @@ public class UI {
     * updates action display
     * */
     public void updateActDisplay(){
-        actions.set(2,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","ATTACK")+"│");
-        actions.set(3,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","DEFEND")+"│");
-        actions.set(4,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","RELOAD")+"│");
+        actions.set(2,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","1 > ATTACK")+"│");
+        actions.set(3,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","2 > DEFEND")+"│");
+        actions.set(4,"│"+String.format("%-"+ Integer.toString(this.width-2)+ "s","3 > RELOAD")+"│");
 
     }
 

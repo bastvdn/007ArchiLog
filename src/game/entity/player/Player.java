@@ -2,8 +2,12 @@ package game.entity.player;
 
 import game.armor.Coat;
 import game.armor.Naked;
+import game.armor.Thornmail;
 import game.entity.Entity;
 import game.weapon.Fist;
+import game.weapon.Nerf;
+import game.weapon.SuperLazerGun;
+
 /*
  * Player is an entity that the user controls, his action will be determined by the user
  * he also got an armor and a weapon, as all the entity does
