@@ -51,14 +51,15 @@ public class Game implements KeyListener {
         ui = new UI(this);
 
          */
-        JTextField typingArea = new JTextField(20);
 
-        typingArea.addKeyListener(this);
-        System.out.println("pressed");
         ui = new UI(this);
+        ui.announce("start");
+        ui.resetDisplay();
+        Scanner scanner = new Scanner(System.in);
+        String action = scanner.nextLine();
 
         this.player = Player.getInstance();
-        player.setName("Le Roi Babtou");
+        player.setName(action);
         loop();
 
     }
