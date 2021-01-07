@@ -37,7 +37,7 @@ public class Game implements KeyListener {
         }
     }
 
-    protected Game() throws InterruptedException {
+    private Game() throws InterruptedException {
 
         /*
         MobsBuilder mobsBuilder = new MobsBuilder();

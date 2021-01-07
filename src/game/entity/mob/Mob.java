@@ -69,9 +69,9 @@ public abstract class Mob extends Entity {
 
     /* getInfoMob: gives the stats of the mob
      * */
-    public void getInfoMob(){
-        System.out.println(getQuality()+ " " +getClass().getSimpleName() + " : "+ getHp() + "/"+ getMaxHp() +
-                "HP     bullets: " + getAmmo() + "   attaque: "+ getAttack());
+    public String getInfoMob(){
+        return getQuality()+ " " +getClass().getSimpleName() + " : "+ getHp() + "/"+ getMaxHp() +
+                "HP     bullets: " + getAmmo() + "   attaque: "+ getAttack();
 
     }
 
