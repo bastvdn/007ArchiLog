@@ -103,7 +103,7 @@ public abstract class Entity {
                 int initEnemyHp = enemy.getHp(); //if the random number between 1 and  100 is inferior to the crit chance, the attack will hit twice
                 if ((int)(Math.random() * 101) < (critical+getWeapon().criticalStrike())) {
                     crit = 2;                                                                                           //critical counter goes to 2
-                    //System.out.println("                CRITICAL STRIKE");
+
                     lifeSelfImpact();                                                                                   //will hit twice if crit
                 }
                 lifeSelfImpact();
@@ -113,18 +113,11 @@ public abstract class Entity {
                 float trueDmg= damageMultiplicator*baseDamage;
                 int trueDmgInt = (int)trueDmg;
                 enemy.setHp(enemy.getHp() - trueDmgInt);                                                                //the enemy Hp are lowered according to : the attacker damages and weapon damages, the armor and damage reduction of the enemy
-                //System.out.println(enemy.getHp() - (damageMultiplicator*baseDamage));
-                //System.out.println("                " + enemy.getClass().getSimpleName() + " à perdu " +
-                //        (initEnemyHp-enemy.getHp()) + " hp");
 
-                if (getWeapon().lifeSelfImpact() != 0) {
-                    System.out.println(getClass().getSimpleName() + "heals himself" + (getHp()-initHp) + " Hp");
-                }
+
             }
         }
-        else {
-            System.out.println("NOT ENOUGH BULLETS");                                                               // if you dont have enough bullets
-        }
+
     }
 
     /* getInfoWeapon: gives the stats of the weapon

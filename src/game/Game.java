@@ -272,13 +272,13 @@ public class Game{
 
                         case 2:
                             break;
-                    }
+                    }       //end of drop
 
                     fightNumber += 1;    //the player goes to the next fight
                     score += 1;
                     loading();
-                }
-            }
+                }       //end of fight
+            }        //end of 3 fights
             level += 1;     //the player goes to the next level, ennemy will be stronger
             fightNumber = 0;
             upgrade();      //the player can upgrade himself
