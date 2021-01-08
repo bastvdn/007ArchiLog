@@ -25,8 +25,8 @@ public class Game{
     private int score = 0;
     protected Mob mob;
     private static Game instance;   //Singleton game
-    private UI ui;                  //Creation of the UI
-    protected int pointeur =0;
+    private final UI ui;                  //Creation of the UI
+    protected int pointer =0;
     protected int turns = 0;
 
 
@@ -50,7 +50,9 @@ public class Game{
 
         ui = new UI(this);
         ui.announce("start");
-        ui.resetDisplay();                              //We setup the UI
+        ui.resetDisplay();
+        //We setup the UI
+
         Scanner scanner = new Scanner(System.in);
         String action = scanner.nextLine();
         while (action.length()>20){
@@ -192,7 +194,6 @@ public class Game{
                 }
                 ui.resetDisplay();
 
-
             }
 
              //the player inputs his action
@@ -234,7 +235,7 @@ public class Game{
     }
 
     /*
-    * generates the mob comportement
+    * generates the mob behaviour
     *
     * */
     private void mobDoAction(){
@@ -246,7 +247,6 @@ public class Game{
         }
         if (mobAction == 2) { //nothing happens and player looses bullets
             ui.setMobAction(2);
-            ;
         }
         if (mobAction == 3) { //the mob reload and gets attacked
             ui.setMobAction(3);
@@ -261,16 +261,17 @@ public class Game{
      * */
     void loop() {
         while (player.getHp() > 0) {                //while the player is alive
-
+            long startTime = System.nanoTime();
             MobsBuilder mobsBuilder = new MobsBuilder();
-            MobsBoard mobs = mobsBuilder.buildMobs(level);     //Generate a mobbuilder board containing all the mobs
-
+            MobsBoard mobs = mobsBuilder.buildMobs(level);     //Generate a mob builder board containing all the mobs
+            long timeElapsed = System.nanoTime() - startTime;
+            System.out.println("Execution time of mob generation in millis  : " + timeElapsed/1000000);
             while (fightNumber < 3) {    // every 3 fights
 
                 mob = mobs.getMob(fightNumber);      //we pick one of the mobs in the board according to the fight level
                 ui.announce("mobInfo");           //setup UI
 
-                fight(mob);                         //lauches the fight versus the mob
+                fight(mob);                         //launches the fight versus the mob
                 //fight ended
                 if (player.getHp() <= 0) {          //if the player dies the game ends
                     ui.announce("plaDead");
@@ -279,8 +280,8 @@ public class Game{
                     ui.resetAnimationsDisplay();
                     ui.resetDisplay();
                     wait(1500);
-
                 }
+
                 if (mob.getHp() <= 0) {       //if the mob dies
                     ui.announce("mobDead");
 
@@ -291,7 +292,7 @@ public class Game{
                     ui.resetDisplay();
                     wait(1500);
 
-                    player.regeneration();              //the player regens Hp
+                    player.regeneration();              //the player regen Hp
                     ui.updatePlaDisplay();
 
                     ui.announce("regen");
@@ -335,7 +336,7 @@ public class Game{
                     //loading();
                 }       //end of fight
             }        //end of 3 fights
-            level += 1;     //the player goes to the next level, ennemy will be stronger
+            level += 1;     //the player goes to the next level, enemy will be stronger
             fightNumber = 0;
             upgrade();      //the player can upgrade himself
         }
