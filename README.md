@@ -23,6 +23,7 @@ run Main.java
 ```
 
 It will launch the gameplay loop located in [Game](https://github.com/bastvdn/007ArchiLog/blob/master/src/game/Game.java)
+
 The game will be displayed on your console by [UI](https://github.com/bastvdn/007ArchiLog/blob/master/src/game/UI.java)
 
 ## Unit test
