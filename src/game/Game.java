@@ -55,10 +55,16 @@ public class Game{
         String action = scanner.nextLine();
         while (action.length()>20){
             System.out.println("Name too long!");
+            ui.announce("errorIn");
+
+            ui.resetDisplay();
             action = scanner.nextLine();
         }
         this.player = Player.getInstance();
         player.setName(action);                         //We setup the player name
+        ui.announce("infoPla");
+        ui.resetDisplay();
+        wait(1000);
         loop();                                         //game loop
 
     }
@@ -83,12 +89,25 @@ public class Game{
         ui.resetDisplay();
 
         Scanner scanner = new Scanner(System.in);
-        int action = scanner.nextInt();
 
-        while (0>=action || action >3){
-            ui.announce("errorIn");
+        int action;
+
+        while (true){
+            try {
+                action = scanner.nextInt();
+                if(0<action && action <= 5){
+                    break;
+                }
+                ui.announce("errorIn");
+
+            }
+            catch (Exception e){
+                System.out.println("Bad input str");
+                ui.announce("errorIn");
+                action = -1;
+                break;
+            }
             ui.resetDisplay();
-            action = scanner.nextInt();
 
         }
 
@@ -101,6 +120,10 @@ public class Game{
         if (action == 3){
             player.setAmmo(player.getAmmo()+3);
         }
+        wait(1000);
+        ui.announce("infoPla");             //setup UI
+        ui.resetDisplay();
+        wait(1000);
     }
 
     /* wait: used to delay time
@@ -153,19 +176,22 @@ public class Game{
             while (true){
                 try {
                     action = scanner.nextInt();
-                    if(0<action && action < 5){
+                    if(0<action && action <= 5){
                         break;
                     }
                     ui.announce("errorIn");
+
                 }
                 catch (Exception e){
                     System.out.println("Bad input str");
+                    ui.announce("errorIn");
                     action = -1;
 
                     break;
 
                 }
                 ui.resetDisplay();
+
 
             }
 

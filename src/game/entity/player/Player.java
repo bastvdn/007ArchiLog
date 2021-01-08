@@ -27,7 +27,7 @@ public class Player extends Entity {
         setMaxHp(100);
         setCritical(0);
         setRegen(2);
-        setWeapon(new Fist());
+        setWeapon(new Nerf());
         setArmor(new Naked());
     }
 

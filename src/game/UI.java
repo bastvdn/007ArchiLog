@@ -29,6 +29,7 @@ public class UI {
     int mobAction = 0;
     int lastEnemyHp;
     int lastPlayerHp;
+    int lastPlayerAmmo;
 
     /*
      * The size of the window
@@ -266,14 +267,18 @@ public class UI {
         String ally = this.actionList.get(this.playerAction);
         String enn = this.actionList.get(this.mobAction);
         String tot = "          YOU "+ ally+"       ENEMY "+ enn;
+        String oob = "";
+
         this.animations.set(2, String.format("%-"+ this.width / 2 + "s",tot));
         String enndmg = String.format("%-"+ this.width / 4 + "s","");
         String allydmg = String.format("%"+ this.width / 4 + "s","");
+
         if(ally.equals("Attack")){
-            if (this.game.player.getAmmo()-this.game.player.getWeapon().bps() < 0){
-                String oob = "      ⚠OUT OF BULLETS ⚠ ️";
-                this.animations.set(3, String.format("%-"+ this.width / 2 + "s",oob));
+            if (lastPlayerAmmo - this.game.player.getWeapon().bps() < 0){
+                oob = "      ⚠OUT OF BULLETS ⚠ ";
+
             }else{
+
                 enndmg = String.format("%-"+ this.width / 4 + "s","        -" + (this.lastEnemyHp - this.game.mob.getHp()));
             }
         }
@@ -281,8 +286,10 @@ public class UI {
             allydmg = String.format("%"+ this.width / 4 + "s","-" + (this.lastPlayerHp - this.game.player.getHp()) +"         ");
         }
         this.animations.set(1, String.format("%"+ this.width / 2 + "s",allydmg+enndmg));
+        this.animations.set(3, String.format("%-"+ (this.width / 2 - 1) + "s",oob));
         this.lastEnemyHp = this.game.mob.getHp();
         this.lastPlayerHp = this.game.player.getHp();
+        this.lastPlayerAmmo = this.game.player.getAmmo();
     }
     /*
     * updates the announcement box
@@ -300,6 +307,20 @@ public class UI {
     * */
     public void announce(String s){
 
+        if (s.equals("infoPla")){
+            this.announcementList.add(this.game.player.getName() +" : " + this.game.player.getHp() + "/" + this.game.player.getMaxHp() + "HP bullets :" + this.game.player.getAmmo());
+
+            this.announcementList.add("Armor : "+ this.game.player.getArmor().getClass().getSimpleName());
+            this.announcementList.add("Weapon : "+ this.game.player.getWeapon().getClass().getSimpleName());
+            this.announcementList.add("");
+
+        }
+        if (s.equals("errorIn")){
+            this.announcementList.add("Bad Input");
+            this.announcementList.add("");
+
+
+        }
         if(s.equals("start")){
             this.announcementList.add("Welcome in 007");
             this.announcementList.add("↓   ↓   ↓   ↓   ↓   ↓   ↓ ");
@@ -309,6 +330,7 @@ public class UI {
         if(s.equals("mobInfo")){
             this.lastPlayerHp = this.game.player.getHp();
             this.lastEnemyHp = this.game.mob.getHp();
+            this.lastPlayerAmmo = this.game.player.getAmmo();
             String str = game.mob.getQuality()+ " " +game.mob.getClass().getSimpleName() + " : "+ game.mob.getHp() + "/"+ game.mob.getMaxHp() +
                     "HP";
             String str1 = "bullets: " + game.mob.getAmmo() + "   attack: "+ game.mob.getAttack();
