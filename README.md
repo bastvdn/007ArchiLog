@@ -2,11 +2,11 @@
 
 rpg version of the famous playground game 007.
 We have improved the base game with a new feature but we have
-keep the basic spirit of this one: attack, recharge and defend.
+kept the basic spirit of this one: attack, reload and defend.
 
-You play as a hero of your choice with certain basic stats, and
-fight original Mobs with armor and stat-boosting weapons
-the entity that wears them.
+You play as a hero of your choice with certain basic stats, you
+fight and loot original Mobs with armor and stat-boosting weapons.
+
 
 ## Installation
 
@@ -16,11 +16,14 @@ git clone https://github.com/bastvdn/007ArchiLog
 
 ### Building the project
 
-Open the project with Intellij or any counterpart
+Open the project with Intellij or any counterpart and run [Main](https://github.com/bastvdn/007ArchiLog/blob/master/src/game/Main.java)
 
 ```
 run Main.java
 ```
+
+It will launch the gameplay loop located in [Game](https://github.com/bastvdn/007ArchiLog/blob/master/src/game/Game.java)
+The game will be displayed on your console by [UI](https://github.com/bastvdn/007ArchiLog/blob/master/src/game/UI.java)
 
 ## Unit test
 
