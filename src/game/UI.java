@@ -266,13 +266,14 @@ public class UI {
         String ally = this.actionList.get(this.playerAction);
         String enn = this.actionList.get(this.mobAction);
         String tot = "          YOU "+ ally+"       ENNEMY "+ enn;
+        String oob = "";
         this.animations.set(2, String.format("%-"+ this.width / 2 + "s",tot));
         String enndmg = String.format("%-"+ this.width / 4 + "s","");
         String allydmg = String.format("%"+ this.width / 4 + "s","");
         if(ally.equals("Attack")){
             if (this.game.player.getAmmo()-this.game.player.getWeapon().bps() < 0){
-                String oob = "      ⚠OUT OF BULLETS ⚠ ️";
-                this.animations.set(3, String.format("%-"+ this.width / 2 + "s",oob));
+                oob = "      ⚠OUT OF BULLETS ⚠ ";
+                //this.animations.set(3, String.format("%-"+ this.width / 2 + "s",oob));
             }else{
                 enndmg = String.format("%-"+ this.width / 4 + "s","        -" + (this.lastEnnemyHp - this.game.mob.getHp()));
             }
@@ -281,6 +282,7 @@ public class UI {
             allydmg = String.format("%"+ this.width / 4 + "s","-" + (this.lastPlayerHp - this.game.player.getHp()) +"         ");
         }
         this.animations.set(1, String.format("%"+ this.width / 2 + "s",allydmg+enndmg));
+        this.animations.set(3, String.format("%-"+ this.width / 2 + "s",oob));
         this.lastEnnemyHp = this.game.mob.getHp();
         this.lastPlayerHp = this.game.player.getHp();
     }
@@ -300,10 +302,16 @@ public class UI {
     * */
     public void announce(String s){
 
+        if(s.equals("errorIn")){
+            this.announcementList.add("Bad Input");
+            this.announcementList.add("");
+
+        }
+
         if(s.equals("start")){
             this.announcementList.add("Welcome in 007");
-            this.announcementList.add("↓   ↓   ↓   ↓   ↓   ↓   ↓ ");
-            this.announcementList.add("Enter your name?");
+            this.announcementList.add(" ↓   ↓   ↓   ↓  ");
+            this.announcementList.add("Enter your name");
             this.announcementList.add("");
         }
         if(s.equals("mobInfo")){

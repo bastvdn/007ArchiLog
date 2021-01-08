@@ -2,6 +2,7 @@ package game.entity.player;
 import game.armor.Naked;
 import game.entity.Entity;
 import game.weapon.Fist;
+import game.weapon.Nerf;
 
 /*
  * Player is an entity that the user controls, his action will be determined by the user

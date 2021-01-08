@@ -53,6 +53,10 @@ public class Game{
         ui.resetDisplay();                              //We setup the UI
         Scanner scanner = new Scanner(System.in);
         String action = scanner.nextLine();
+        while (action.length()>20){
+            System.out.println("Name too long!");
+            action = scanner.nextLine();
+        }
         this.player = Player.getInstance();
         player.setName(action);                         //We setup the player name
         loop();                                         //game loop
@@ -80,6 +84,13 @@ public class Game{
 
         Scanner scanner = new Scanner(System.in);
         int action = scanner.nextInt();
+
+        while (0>=action || action >3){
+            ui.announce("errorIn");
+            ui.resetDisplay();
+            action = scanner.nextInt();
+
+        }
 
         if (action == 1){
             player.setMaxHp(player.getMaxHp()+10);      //buff the player according to the input
@@ -137,9 +148,28 @@ public class Game{
             ui.updateEnnDisplay();
             ui.updateActDisplay();
             ui.resetDisplay();
-
+            int action;
             Scanner scanner = new Scanner(System.in);
-            int action = scanner.nextInt(); //the player inputs his action
+            while (true){
+                try {
+                    action = scanner.nextInt();
+                    if(0<action && action < 5){
+                        break;
+                    }
+                    ui.announce("errorIn");
+                }
+                catch (Exception e){
+                    System.out.println("Bad input str");
+                    action = -1;
+
+                    break;
+
+                }
+                ui.resetDisplay();
+
+            }
+
+             //the player inputs his action
                                             //the mob chooses what does he do according to the current player stats
 
             //1 = attack, 2 = protect , 3 = reload
@@ -276,7 +306,7 @@ public class Game{
 
                     fightNumber += 1;    //the player goes to the next fight
                     score += 1;
-                    loading();
+                    //loading();
                 }       //end of fight
             }        //end of 3 fights
             level += 1;     //the player goes to the next level, ennemy will be stronger
