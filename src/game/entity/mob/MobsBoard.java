@@ -16,7 +16,7 @@ public class MobsBoard {
     * weapons available at each level
     * */
     private static final Weapon[][] weaponBoard = {
-            {new Fist(), new Nerf()},
+            {new Nerf(), new Nerf()},
             {new Nerf(), new BBGun()},
             {new BBGun(), new StunGun()},
             {new StunGun(),new SuperLazerGun()},

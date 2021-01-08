@@ -21,10 +21,10 @@ public class Player extends Entity {
     public void setName(String name) { this.name = name; }
 
     private Player() {
-        setHp(100);
+        setHp(150);
         setAttack(10);
         setAmmo(1);
-        setMaxHp(100);
+        setMaxHp(150);
         setCritical(0);
         setRegen(2);
         setWeapon(new Nerf());
