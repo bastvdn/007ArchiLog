@@ -38,7 +38,7 @@ public abstract class Mob extends Entity {
 
     }
     /*
-    * chooseAction : return 1 (attack) , 2 (defend) , 3 (reload) according to the ratio between the three inputs (attaque, defense, recharge)
+    * chooseAction : return 1 (attack) , 2 (defend) , 3 (reload) according to the ratio between the three inputs (attack, defense, reload)
     *
     * */
     private int chooseAction(int attaque,int defense, int recharge){
@@ -60,11 +60,8 @@ public abstract class Mob extends Entity {
         }
         if ((chanceRech > chanceDef) && (chanceRech > chanceAtt)){
             setState("Reloading");
-            return 3;
         }
-        else{
-            return 3;
-        }
+        return 3;
     }
 
     /* getInfoMob: gives the stats of the mob

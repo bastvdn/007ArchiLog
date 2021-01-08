@@ -12,7 +12,7 @@ import game.weapon.Weapon;
 * ammo: the number of attack charges the entity has, if it goes to zero the entity cannot attack
 * maxHp: the maximum health point an entity can get, Hp cannot be over maxHp
 * regen: the base value of health the entity will regenerate after 1 fight
-* critical: the chance of the entity attack hittting twice (chance of hitting twice= critical/100)
+* critical: the chance of the entity attack hitting twice (chance of hitting twice= critical/100)
 * weapon: the weapon of the entity, boosting the stats
 * armor: the armor of the entity, boosting ths stats
 * */
@@ -77,7 +77,6 @@ public abstract class Entity {
     * user regenerates Hp at the end of every fight (according to the armor he is equipped with and his base stats)
     * */
     public void regeneration(){
-        int initHp = getHp();
         int regenTotal = (getArmor().regen()+getRegen());
         if(regenTotal != 0){
             setHp(getHp()+regenTotal);
@@ -98,9 +97,8 @@ public abstract class Entity {
             setAmmo(getAmmo()-getWeapon().bps());
 
             if (!enemy.getState().equals("Defending")){
-                int crit = 1;                                                                                                   //this is the critical counter
-                int initHp = getHp();
-                int initEnemyHp = enemy.getHp(); //if the random number between 1 and  100 is inferior to the crit chance, the attack will hit twice
+                int crit = 1;
+
                 if ((int)(Math.random() * 101) < (critical+getWeapon().criticalStrike())) {
                     crit = 2;                                                                                           //critical counter goes to 2
 
@@ -109,8 +107,8 @@ public abstract class Entity {
                 lifeSelfImpact();
                 float baseDamage= (getAttack() + crit*getWeapon().damage());                                            //the crit only works on the weapon damages
                 int enemyDamageReduction = enemy.getArmor().damageReduced();
-                float damageMultiplicator = (100/(100+(float)enemyDamageReduction));
-                float trueDmg= damageMultiplicator*baseDamage;
+                float damageMultiplier = (100/(100+(float)enemyDamageReduction));
+                float trueDmg= damageMultiplier*baseDamage;
                 int trueDmgInt = (int)trueDmg;
                 enemy.setHp(enemy.getHp() - trueDmgInt);                                                                //the enemy Hp are lowered according to : the attacker damages and weapon damages, the armor and damage reduction of the enemy
 
@@ -124,7 +122,7 @@ public abstract class Entity {
      * */
     public String getInfoWeapon(){
 
-        System.out.println(getWeapon().getClass().getSimpleName() + "---> Additionnal damages :" + getWeapon().damage() +
+        System.out.println(getWeapon().getClass().getSimpleName() + "---> Additional damages :" + getWeapon().damage() +
                 " Bullet cost :" + getWeapon().bps() + " LifeSteal :" + getWeapon().lifeSelfImpact());
         return null;
     }
@@ -133,7 +131,7 @@ public abstract class Entity {
      * */
     public void getInfoArmor(){
 
-        System.out.println(getArmor().getClass().getSimpleName() + "---> Damage raduction :" + getArmor().damageReduced() +
+        System.out.println(getArmor().getClass().getSimpleName() + "---> Damage reduction :" + getArmor().damageReduced() +
                 " added maxHP :" + getArmor().pdV() + " regeneration :" + getArmor().regen());
     }
 

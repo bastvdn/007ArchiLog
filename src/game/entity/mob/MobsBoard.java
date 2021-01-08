@@ -10,12 +10,12 @@ import game.armor.*;
 * */
 public class MobsBoard {
 
-    private List<Mob> mobs = new ArrayList<Mob>();
+    private final List<Mob> mobs = new ArrayList<>();
 
     /*
     * weapons available at each level
     * */
-    private static Weapon[][] weaponBoard = {
+    private static final Weapon[][] weaponBoard = {
             {new Fist(), new Nerf()},
             {new Nerf(), new BBGun()},
             {new BBGun(), new StunGun()},
@@ -26,7 +26,7 @@ public class MobsBoard {
     /*
      * armors available at each level
      * */
-    private static Armor[][] armorBoard = {
+    private static final Armor[][] armorBoard = {
             {new Naked(), new Tshirt()},
             {new Tshirt(),new Coat()},
             {new Coat(),new BulletVest()},
@@ -38,11 +38,11 @@ public class MobsBoard {
      * adjectives available at each level (for fun purpose only, no interaction with the game whatsoever)
      * */
 
-    private static String[][] qualityBoard = {
-            {"Baby","Happy","Cute","Not sad", "Curious"},
+    private static final String[][] qualityBoard = {
+            {"Baby","Happy","Cute","Depressed", "Curious"},
             {"Geeky", "DJ", "Seductive", "Kinky", "Meticulous"},
             {"Go-muscu", "Pro-hacker", "Serious", "Sneaky","Totally incognito" },
-            { "Sasuke", "Mega", "Enraged", "Rudeboy", "Fuckboy"},
+            { "Master", "Mega", "Enraged", "Bad-boy", "Fuck-boy"},
             {"Super-angry","The wisest", "Chuck-Norris", "God-like", "Once again that fucking"}
     };
 

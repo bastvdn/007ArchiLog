@@ -1,8 +1,8 @@
 package game.entity.mob;
 
-class RandomDrunkedGuy extends Mob {
+class RandomDrunkDude extends Mob {
 
-    RandomDrunkedGuy(int level) {
+    RandomDrunkDude(int level) {
         setLevel(level);
         double ratio = 1 + (float)(level)/2;
         setHp((int)(ratio*30));
