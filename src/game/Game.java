@@ -50,15 +50,20 @@ public class Game{
 
         ui = new UI(this);
         ui.announce("start");
-        ui.resetDisplay();                              //We setup the UI
+        ui.resetDisplay();
+        //We setup the UI
+
         Scanner scanner = new Scanner(System.in);
         String action = scanner.nextLine();
         while (action.length()>20){
             System.out.println("Name too long!");
             action = scanner.nextLine();
         }
+        long startTime = System.nanoTime();
         this.player = Player.getInstance();
         player.setName(action);                         //We setup the player name
+        long elapsedTime = System.nanoTime() - startTime;
+        System.out.println("Total execution time in millis: " + elapsedTime/1000000);
         loop();                                         //game loop
 
     }
@@ -161,7 +166,6 @@ public class Game{
                 catch (Exception e){
                     System.out.println("Bad input str");
                     action = -1;
-
                     break;
 
                 }
@@ -234,10 +238,11 @@ public class Game{
      * */
     void loop() {
         while (player.getHp() > 0) {                //while the player is alive
-
+            long startTime = System.nanoTime();
             MobsBuilder mobsBuilder = new MobsBuilder();
             MobsBoard mobs = mobsBuilder.buildMobs(level);     //Generate a mob builder board containing all the mobs
-
+            long timeElapsed = System.nanoTime() - startTime;
+            System.out.println("Execution time of mob generation in millis  : " + timeElapsed/1000000);
             while (fightNumber < 3) {    // every 3 fights
 
                 mob = mobs.getMob(fightNumber);      //we pick one of the mobs in the board according to the fight level
@@ -252,8 +257,8 @@ public class Game{
                     ui.resetAnimationsDisplay();
                     ui.resetDisplay();
                     wait(1500);
-
                 }
+
                 if (mob.getHp() <= 0) {       //if the mob dies
                     ui.announce("mobDead");
 
